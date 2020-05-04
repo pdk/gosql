@@ -1,0 +1,47 @@
+package gosql
+
+contract canEqual(T) {
+    T Equals(T) bool
+}
+
+// ListSet contains an ordered set of items.
+type ListSet(type T canEqual) struct {
+    items []T
+}
+
+// Append will add an item, unless it's already in the ListSet.
+func (ls ListSet(T)) Append(item T) ListSet(T) {
+
+    // don't add duplicate items
+    for _, present := range ls.items {
+        if item.Equals(present) {
+            return ls
+        }
+    }
+
+    ls.items = append(ls.items, item)
+
+    return ls
+}
+
+// Items returns a slice of the items stored in the ListSet.
+func (ls ListSet(T)) Items() []T {
+    result := make([]T, len(ls.items))
+    copy(result, ls.items)
+    return result
+}
+
+type selectExpr interface {
+    selectString() string
+    Equals(selectExpr) bool
+}
+
+type fromExpr interface {
+    fromString() string
+    Equals(fromExpr) bool
+}
+
+type Query struct {
+    selectClause ListSet(selectExpr)
+    fromClause   ListSet(fromExpr)
+}

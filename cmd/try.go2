@@ -1,0 +1,24 @@
+package main
+
+import (
+    "fmt"
+    "github.com/pdk/gosql"
+)
+
+type eString string
+
+func (e eString) Equals(other eString) bool {
+    return e == other
+}
+
+func main() {
+	fmt.Printf("hello\n")
+
+    x := gosql.ListSet(eString){}
+
+    x = x.Append(eString("foo"))
+    x = x.Append(eString("bar"))
+    x = x.Append(eString("foo"))
+
+    fmt.Printf("%s\n", x.Items())
+}
